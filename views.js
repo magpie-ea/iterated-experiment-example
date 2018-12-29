@@ -28,26 +28,20 @@ const instructions = babeViews.instructions({
     trials: 1,
     name: "instructions",
     title: "General Instructions",
-    text: `In this experiment, two participants interact with each other. In each trial, three colors are shown to the participants. Only the speaker knows which of the three colors is the <i>target</i> color. The speaker and the listener can talk to each other via a chat box. Once the listener feels confident enough, they will click on one of the colors. The experiment then moves on to the next trial.
+    text: `This is a demo of an iterated experiment. There are 5 chains in total, with 20 realizations per chain. (There's only one "variant".) The participant assigned the tuple <variant-nr, chain-nr, realization-nr> must wait for information to come from the participant <variant-nr, chain-nr, realization-nr - 1>.
 
     <br>
 
-    The first participant will be put in the "lobby" waiting for another participant to join. Once two participants are matched with each other, the experiment starts.
+    The participant will first go into a lobby. If an opening is available, they will start the task immediately. Otherwise, they will wait until a previous participant has finished the task, by which point they will be notified and start the task.
     `,
     buttonText: "To the Lobby"
 });
 
-const lobby = iteratedExperimentViews.interactiveExperimentLobby({
+const lobby = iteratedExperimentViews.iteratedExperimentLobby({
     name: "lobby",
     trials: 1,
     title: "Lobby",
     text: "Connecting to the server..."
-});
-
-const game = iteratedExperimentViews.game({
-    name: "game",
-    trials: 5,
-    title: "Color Reference Game"
 });
 
 // submits the results
