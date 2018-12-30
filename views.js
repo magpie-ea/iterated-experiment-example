@@ -28,8 +28,10 @@ const instructions = babeViews.instructions({
     trials: 1,
     name: "instructions",
     title: "General Instructions",
-    text: `This is a demo of an iterated experiment. There are 5 chains in total, with 20 realizations per chain. (There's only one "variant".) The participant assigned the tuple <variant-nr, chain-nr, realization-nr> must wait for information to come from the participant <variant-nr, chain-nr, realization-nr - 1>.
+    text: `
+    This is a demo of an iterated experiment. There are 3 chains in total, with 20 realizations per chain. (There's only one "variant".) The participant assigned the tuple &lt;variant-nr, chain-nr, realization-nr&gt; must wait for information to come from the participant &lt;variant-nr, chain-nr, realization-nr - 1&gt;.
 
+    <br>
     <br>
 
     The participant will first go into a lobby. If an opening is available, they will start the task immediately. Otherwise, they will wait until a previous participant has finished the task, by which point they will be notified and start the task.

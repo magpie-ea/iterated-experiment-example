@@ -22,7 +22,8 @@ const iteratedExperimentUtils = {
                     trials: addEmptyColumns(babe.trial_data),
                     variant: babe.variant,
                     chain: babe.chain,
-                    realization: babe.realization
+                    realization: babe.realization,
+                    participant_id: babe.participant_id
                 };
 
                 // merge in global_data accummulated so far

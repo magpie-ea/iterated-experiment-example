@@ -6,12 +6,10 @@ const iteratedExperimentViews = {
             text: config.text || "Initializing the experiment...",
             render: function(CT, babe) {
                 const viewTemplate = `
-                        <div className="babe-view">
-                            <h1 className="babe-view-title">${this.title}</h1>
-                            <section className="babe-text-container">
-                                <p id="lobby-text" className="babe-view-text">${
-                                    this.text
-                                }</p>
+                        <div class="babe-view">
+                            <h1 class="babe-view-title">${this.title}</h1>
+                            <section class="babe-text-container">
+                                <p class="babe-view-text">${this.text}</p>
                             </section>
                         </div>
                 `;
@@ -69,11 +67,6 @@ const iteratedExperimentViews = {
                         babe.variant = payload.variant;
                         babe.chain = payload.chain;
                         babe.realization = payload.realization;
-                        console.log(
-                            `${payload.variant}, ${payload.chain}, ${
-                                payload.realization
-                            }`
-                        );
                         // Proceed to the next view if the connection to the participant channel was successfully established.
                         babe.findNextView();
                     }
@@ -170,6 +163,11 @@ const iteratedExperimentViews = {
                 const viewTemplate = `
                         <p class="babe-view">
                             <h1 class="babe-view-title">${this.title}</h1>
+                                <p class="babe-view-text">Assignment trituple: &lt;variant: ${
+                                    babe.variant
+                                }, chain: ${babe.chain}, realization: ${
+                    babe.realization
+                }&gt;</p>
                                 <p id="text-description" class="babe-view-text">
                                     The following is what the participant of the same chain in the last iteration wrote:
                                 </p>
@@ -188,7 +186,7 @@ const iteratedExperimentViews = {
                 $("#main").html(viewTemplate);
 
                 if (babe.realization == 1) {
-                    $("$text-description").hide();
+                    $("#text-description").hide();
                     document.getElementById("text-last-iteration").innerText = `
                         This is the first iteration. Write whatever you want here.
                     `;

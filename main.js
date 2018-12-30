@@ -12,17 +12,16 @@ $("document").ready(function() {
         // views_seq: [init, intro, instructions, lobby, game, thanks],
         views_seq: [init, intro, instructions, lobby, trial, thanks],
         deploy: {
-            experimentID: "15",
-            // serverAppURL:
-            //     "https://babe-demo.herokuapp.com/api/submit_experiment/",
-            serverAppURL: "http://localhost:4000/api/submit_experiment/",
-            // socketURL: "wss://babe-demo.herokuapp.com/socket",
-            socketURL: "ws://localhost:4000/socket",
+            experimentID: "48",
+            serverAppURL:
+                "https://babe-demo.herokuapp.com/api/submit_experiment/",
+            // serverAppURL: "http://localhost:4000/api/submit_experiment/",
+            socketURL: "wss://babe-demo.herokuapp.com/socket",
+            // socketURL: "ws://localhost:4000/socket",
             deployMethod: "directLink",
             contact_email: "YOUREMAIL@wherelifeisgreat.you",
             prolificURL:
-                "https://app.prolific.ac/submissions/complete?cc=EXAMPLE1234",
-            numParticipantsPerExp: 2
+                "https://app.prolific.ac/submissions/complete?cc=EXAMPLE1234"
         },
         progress_bar: {
             in: ["forcedChoice"],
