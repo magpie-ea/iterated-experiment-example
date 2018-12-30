@@ -12,7 +12,8 @@ $("document").ready(function() {
         // views_seq: [init, intro, instructions, lobby, game, thanks],
         views_seq: [init, intro, instructions, lobby, trial, thanks],
         deploy: {
-            experimentID: "48",
+            experimentID: "49",
+            // experimentID: "15",
             serverAppURL:
                 "https://babe-demo.herokuapp.com/api/submit_experiment/",
             // serverAppURL: "http://localhost:4000/api/submit_experiment/",

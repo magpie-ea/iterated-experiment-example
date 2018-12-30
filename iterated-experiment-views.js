@@ -135,8 +135,16 @@ const iteratedExperimentViews = {
                     babe.lobbyChannel
                         .join()
                         .receive("ok", (msg) => {
-                            document.getElementById("lobby-text").innerHTML =
-                                "<p>Successfully joined the lobby. Waiting for the server...</p>";
+                            document.getElementById(
+                                "lobby-text"
+                            ).innerHTML = `<p class="babe-view-text">Successfully joined the lobby. Waiting for the server...</p>
+                                
+                                <p class="babe-view-text">Assignment trituple: &lt;variant: ${
+                                    babe.variant
+                                }, chain: ${babe.chain}, realization: ${
+                                babe.realization
+                            }&gt;</p>
+                                `;
                         })
                         .receive("error", (reasons) => {
                             babe.onSocketError(reasons);
