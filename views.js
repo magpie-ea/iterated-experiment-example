@@ -44,8 +44,14 @@ const lobby = iteratedExperimentViews.iteratedExperimentLobby({
     text: "Connecting to the server..."
 });
 
+const trial = iteratedExperimentViews.trialView({
+    name: "trial",
+    trials: 1,
+    title: "Demo trial"
+});
+
 // submits the results
-const thanks = babeViews.thanks({
+const thanks = iteratedExperimentViews.thanksWithSocket({
     trials: 1,
     name: "thanks",
     title: "Thank you for taking part in this experiment!",

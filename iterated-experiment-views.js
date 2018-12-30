@@ -69,6 +69,11 @@ const iteratedExperimentViews = {
                         babe.variant = payload.variant;
                         babe.chain = payload.chain;
                         babe.realization = payload.realization;
+                        console.log(
+                            `${payload.variant}, ${payload.chain}, ${
+                                payload.realization
+                            }`
+                        );
                         // Proceed to the next view if the connection to the participant channel was successfully established.
                         babe.findNextView();
                     }
@@ -100,10 +105,10 @@ const iteratedExperimentViews = {
             text: config.text || "Connecting to the server...",
             render: function(CT, babe) {
                 const viewTemplate = `
-                    <div className="babe-view">
-                        <h1 className="babe-view-title">${this.title}</h1>
-                        <section className="babe-text-container">
-                            <p id="lobby-text" className="babe-view-text">${
+                    <div class="babe-view">
+                        <h1 class="babe-view-title">${this.title}</h1>
+                        <section class="babe-text-container">
+                            <p id="lobby-text" class="babe-view-text">${
                                 this.text
                             }</p>
                         </section>
@@ -114,21 +119,22 @@ const iteratedExperimentViews = {
 
                 // If this participant is one of the first generation, there should be no need to wait on any results.
                 if (babe.realization == 1) {
-                    console.log("Not waiting in the lobby");
                     // Apparently you can't call babe.findNextView too soon, otherwise it will just try to render the same view over and over again.
                     setTimeout(babe.findNextView, 1000);
                 } else {
-                    console.log("Waiting in the lobby");
+                    // realization - 1 because we're waiting on the results of the last iteration.
                     babe.lobbyChannel = babe.socket.channel(
-                        `iterated_lobby:${babe.variant}:${babe.chain}:${
-                            babe.realization
-                        }`,
+                        `iterated_lobby:${babe.variant}:${
+                            babe.chain
+                        }:${babe.realization - 1}`,
                         { participant_id: babe.participant_id }
                     );
 
                     // Whenever the waited-on results are submitted (i.e. assignment finished) on the server, this participant will get the results.
                     babe.lobbyChannel.on("finished", (payload) => {
-                        babe.results = payload.results;
+                        babe.lastIterationResults = payload.results;
+                        // We're no longer waiting on that assignment if we already got its results.
+                        babe.lobbyChannel.leave();
                         babe.findNextView();
                     });
 
@@ -152,5 +158,133 @@ const iteratedExperimentViews = {
         };
 
         return _lobby;
+    },
+
+    trialView: function(config) {
+        const _trial = {
+            name: config.name,
+            title: config.title,
+            render: function(CT, babe) {
+                let startingTime;
+
+                const viewTemplate = `
+                        <p class="babe-view">
+                            <h1 class="babe-view-title">${this.title}</h1>
+                                <p id="text-description" class="babe-view-text">
+                                    The following is what the participant of the same chain in the last iteration wrote:
+                                </p>
+                                <p id="text-last-iteration" class="babe-view-text">                               
+                                </p>
+                            <div class="babe-view-answer-container">
+                                <textarea name="textbox-input" id="text-this-iteration" class='babe-response-text' cols="50" rows="20"></textarea>
+                            </div>
+                                <p class="babe-view-text">
+                                    Write something before you click "next". It will be shown to the participant of the same chain in the next iteration.
+                                </p>
+                            <button id='next' class='babe-view-button'>next</button>
+                        </div>
+                `;
+
+                $("#main").html(viewTemplate);
+
+                if (babe.realization == 1) {
+                    $("$text-description").hide();
+                    document.getElementById("text-last-iteration").innerText = `
+                        This is the first iteration. Write whatever you want here.
+                    `;
+                } else {
+                    let prevText = babe.lastIterationResults[0]["response"];
+                    document.getElementById(
+                        "text-last-iteration"
+                    ).innerText = prevText;
+                }
+
+                let next = $("#next");
+                let textInput = $("textarea");
+                next.on("click", function() {
+                    var RT = Date.now() - startingTime; // measure RT before anything else
+                    var trial_data = {
+                        trial_type: config.trial_type,
+                        trial_number: CT + 1,
+                        response: textInput.val().trim(),
+                        RT: RT
+                    };
+
+                    babe.trial_data.push(trial_data);
+                    babe.findNextView();
+                });
+                startingTime = Date.now();
+            },
+            CT: 0,
+            trials: config.trials
+        };
+        return _trial;
+    },
+
+    thanksWithSocket: function(config) {
+        const _thanks = {
+            name: config.name,
+            title: babeUtils.view.setter.title(
+                config.title,
+                "Thank you for taking part in this experiment!"
+            ),
+            prolificConfirmText: babeUtils.view.setter.prolificConfirmText(
+                config.prolificConfirmText,
+                "Please press the button below to confirm that you completed the experiment with Prolific"
+            ),
+            render: function(CT, babe) {
+                if (
+                    babe.deploy.is_MTurk ||
+                    babe.deploy.deployMethod === "directLink"
+                ) {
+                    // updates the fields in the hidden form with info for the MTurk's server
+                    $("#main").html(
+                        `<div class='babe-view babe-thanks-view'>
+                            <h2 id='warning-message' class='babe-warning'>Submitting the data
+                                <p class='babe-view-text'>please do not close the tab</p>
+                                <div class='babe-loader'></div>
+                            </h2>
+                            <h1 id='thanks-message' class='babe-thanks babe-nodisplay'>${
+                                this.title
+                            }</h1>
+                        </div>`
+                    );
+                } else if (babe.deploy.deployMethod === "Prolific") {
+                    $("#main").html(
+                        `<div class='babe-view babe-thanks-view'>
+                            <h2 id='warning-message' class='babe-warning'>Submitting the data
+                                <p class='babe-view-text'>please do not close the tab</p>
+                                <div class='babe-loader'></div>
+                            </h2>
+                            <h1 id='thanks-message' class='babe-thanks babe-nodisplay'>${
+                                this.title
+                            }</h1>
+                            <p id='extra-message' class='babe-view-text babe-nodisplay'>
+                                ${this.prolificConfirmText}
+                                <a href="${
+                                    babe.deploy.prolificURL
+                                }" class="babe-view-button prolific-url">Confirm</a>
+                            </p>
+                        </div>`
+                    );
+                } else if (babe.deploy.deployMethod === "debug") {
+                    $("main").html(
+                        `<div id='babe-debug-table-container' class='babe-view babe-thanks-view'>
+                            <h1 class='babe-view-title'>Debug Mode</h1>
+                        </div>`
+                    );
+                } else {
+                    console.error("No such babe.deploy.deployMethod");
+                }
+
+                babe.submission = iteratedExperimentUtils.babeSubmitWithSocket(
+                    babe
+                );
+                babe.submission.submit(babe);
+            },
+            CT: 0,
+            trials: 1
+        };
+        return _thanks;
     }
 };
