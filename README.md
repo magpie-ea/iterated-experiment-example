@@ -1,6 +1,6 @@
 Demo of iterated experiments with \_babe.
 
-The example corresponds to the experiment with ID 48 on https://babe-demo.herokuapps.com
+The example corresponds to the experiment with ID 48 on https://babe-demo.herokuapp.com
 
 First, clone the repo and run `npm install` in the folder.
 
