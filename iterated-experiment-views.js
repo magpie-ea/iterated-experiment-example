@@ -116,10 +116,11 @@ const iteratedExperimentViews = {
                     setTimeout(babe.findNextView, 1000);
                 } else {
                     // realization - 1 because we're waiting on the results of the last iteration.
+                    // by specifying a different experimentID we can also wait on results from other experiments.
                     babe.lobbyChannel = babe.socket.channel(
-                        `iterated_lobby:${babe.variant}:${
-                            babe.chain
-                        }:${babe.realization - 1}`,
+                        `iterated_lobby:${babe.deploy.experimentID}:${
+                            babe.variant
+                        }:${babe.chain}:${babe.realization - 1}`,
                         { participant_id: babe.participant_id }
                     );
 
