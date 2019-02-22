@@ -1,5 +1,7 @@
 Demo of iterated experiments with \_babe.
 
+Online demo of the experiment available [here](https://iterated-experiment-example.netlify.com/).
+
 The example corresponds to the experiment with ID 54 on https://babe-demo.herokuapp.com
 
 First, clone the repo and run `npm install` in the folder.
