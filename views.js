@@ -11,53 +11,53 @@
 
 const init = iteratedExperimentViews.init({
     trials: 1,
-    name: "init",
-    title: "Initializing"
+    name: 'init',
+    title: 'Initializing'
 });
 
 const intro = babeViews.intro({
-    name: "intro",
+    name: 'intro',
     trials: 1,
-    title: "Welcome!",
+    title: 'Welcome!',
     text:
         'This is an example of an interactive experiment with _babe. More information can be found <a href="https://babe-project.github.io/babe_site/">here</a>.',
-    buttonText: "Begin Experiment"
+    buttonText: 'Begin Experiment'
 });
 
 const instructions = babeViews.instructions({
     trials: 1,
-    name: "instructions",
-    title: "General Instructions",
+    name: 'instructions',
+    title: 'General Instructions',
     text: `
-    This is a demo of an iterated experiment. There are 3 chains in total, with 20 realizations per chain. (There's only one "variant".) The participant assigned the tuple &lt;variant-nr, chain-nr, realization-nr&gt; must wait for information to come from the participant &lt;variant-nr, chain-nr, realization-nr - 1&gt;.
+    This is a demo of an iterated experiment. There are 3 chains in total, with 20 generations per chain. (There's only one "variant".) The participant assigned the tuple &lt;variant-nr, chain-nr, generation-nr&gt; must wait for information to come from the participant &lt;variant-nr, chain-nr, generation-nr - 1&gt;.
 
     <br>
     <br>
 
     The participant will first go into a lobby. If an opening is available, they will start the task immediately. Otherwise, they will wait until a previous participant has finished the task, by which point they will be notified and start the task.
     `,
-    buttonText: "To the Lobby"
+    buttonText: 'To the Lobby'
 });
 
 const lobby = iteratedExperimentViews.iteratedExperimentLobby({
-    name: "lobby",
+    name: 'lobby',
     trials: 1,
-    title: "Lobby",
-    text: "Connecting to the server..."
+    title: 'Lobby',
+    text: 'Connecting to the server...'
 });
 
 const trial = iteratedExperimentViews.trialView({
-    name: "trial",
+    name: 'trial',
     trials: 1,
-    title: "Demo trial"
+    title: 'Demo trial'
 });
 
 // submits the results
 const thanks = iteratedExperimentViews.thanksWithSocket({
     trials: 1,
-    name: "thanks",
-    title: "Thank you for taking part in this experiment!",
-    prolificConfirmText: "Press the button"
+    name: 'thanks',
+    title: 'Thank you for taking part in this experiment!',
+    prolificConfirmText: 'Press the button'
 });
 
 /** trial (babe's Trial Type Views) below
