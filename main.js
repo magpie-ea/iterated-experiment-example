@@ -12,12 +12,12 @@ $('document').ready(function () {
         // views_seq: [init, intro, instructions, lobby, game, thanks],
         views_seq: [init, intro, instructions, lobby, trial, thanks],
         deploy: {
-            experimentID: '1',
+            experimentID: '39efa875-2224-4956-a22c-f75280b40964',
             // experimentID: "1",
             serverAppURL:
-                'https://magpie-refactored-2.herokuapp.com/api/submit_experiment/',
+                'https://magpie-backend.gigalixirapp.com/api/submit_experiment/',
             // serverAppURL: 'http://localhost:4000/api/submit_experiment/',
-            socketURL: 'wss://magpie-refactored-2.herokuapp.com/socket',
+            socketURL: 'wss://magpie-backend.gigalixirapp.com/socket',
             // socketURL: 'ws://localhost:4000/socket',
             deployMethod: 'directLink',
             contact_email: 'YOUREMAIL@wherelifeisgreat.you',

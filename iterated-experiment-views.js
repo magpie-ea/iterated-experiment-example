@@ -61,17 +61,29 @@ const iteratedExperimentViews = {
                 );
 
                 babe.participantChannel.on(
-                    'experiment_available',
-                    (payload) => {
-                        // First record the assigned <variant-nr, chain-nr, generation-nr, player-nr> tuple.
-                        babe.player = payload.player;
-                        babe.variant = payload.variant;
-                        babe.chain = payload.chain;
-                        babe.generation = payload.generation;
+                    'slot_available',
+                    ({ slot_identifier: slot_identifier }) => {
+                        // This should look like 1_1:1:1_1
+                        console.log(slot_identifier);
+                        babe.slot_identifier = slot_identifier;
+                        // This is just to assign a fake value in this test. In real code we'll need to destructure the slot_identifier received.
+                        babe.player = 1;
+                        babe.variant = 1;
+                        babe.chain = 1;
+                        babe.generation = 1;
+                        // Tell the server we've taken the slot so that we're taken off the queue.
+                        babe.participantChannel.push('take_free_slot', {
+                            slot_identifier: slot_identifier
+                        });
                         // Proceed to the next view if the connection to the participant channel was successfully established.
                         babe.findNextView();
                     }
                 );
+
+                babe.participantChannel.on('waiting_in_queue', (payload) => {
+                    // This should look like 1_1:1:1_1
+                    console.log('Waiting in queue');
+                });
 
                 babe.participantChannel
                     .join()
