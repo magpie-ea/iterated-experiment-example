@@ -72,9 +72,35 @@ const iteratedExperimentViews = {
                         babe.chain = 1;
                         babe.generation = 1;
                         // Tell the server we've taken the slot so that we're taken off the queue.
-                        babe.participantChannel.push('take_free_slot', {
-                            slot_identifier: slot_identifier
-                        });
+                        babe.participantChannel
+                            .push('take_free_slot', {
+                                slot_identifier: slot_identifier
+                            })
+
+                            .receive('ok', (payload) => {
+                                console.log('take_free_slot ok');
+                                babe.participantChannel
+                                    .push('get_submission_for_slot', {
+                                        experiment_id: babe.deploy.experimentID,
+                                        slot_identifier: '1_1:1:1_1'
+                                    })
+
+                                    .receive('ok', (payload) => {
+                                        console.log(payload);
+                                    })
+                                    .receive('error', (reasons) => {
+                                        console.log(reasons);
+                                    })
+                                    .receive('timeout', () => {
+                                        babe.onSocketTimeout();
+                                    });
+                            })
+                            .receive('error', (reasons) => {
+                                console.log(reasons);
+                            })
+                            .receive('timeout', () => {
+                                babe.onSocketTimeout();
+                            });
                         // Proceed to the next view if the connection to the participant channel was successfully established.
                         babe.findNextView();
                     }
@@ -206,9 +232,8 @@ const iteratedExperimentViews = {
                     `;
                 } else {
                     let prevText = babe.lastIterationResults[0]['response'];
-                    document.getElementById(
-                        'text-last-iteration'
-                    ).innerText = prevText;
+                    document.getElementById('text-last-iteration').innerText =
+                        prevText;
                 }
 
                 let next = $('#next');
@@ -283,9 +308,8 @@ const iteratedExperimentViews = {
                     console.error('No such babe.deploy.deployMethod');
                 }
 
-                babe.submission = iteratedExperimentUtils.babeSubmitWithSocket(
-                    babe
-                );
+                babe.submission =
+                    iteratedExperimentUtils.babeSubmitWithSocket(babe);
                 babe.submission.submit(babe);
             },
             CT: 0,
